@@ -1,0 +1,34 @@
+name: Generate OLDFISH RSS
+
+on:
+  schedule:
+    # 1時間ごとに自動実行（UTC表記）
+    - cron: '0 * * * *'
+  workflow_dispatch: # 手動で即座に実行するボタン
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+
+      - name: Python環境のセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: ライブラリのインストール
+        run: |
+          pip install requests beautifulsoup4 feedgen
+
+      - name: スクレイピングの実行
+        run: python main.py
+
+      - name: 生成したRSS（oldfish.xml）をコミットして保存
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add oldfish.xml
+          git commit -m "Update RSS feed" || exit 0
+          git push
