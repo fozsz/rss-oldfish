@@ -2,8 +2,8 @@ name: Generate OLDFISH RSS
 
 on:
   schedule:
-    # 1時間ごとに自動実行（UTC表記）
-    - cron: '0 * * * *'
+    # 30分ごとに自動実行
+    - cron: '*/30 * * * *'
   workflow_dispatch: # 手動で即座に実行するボタン
 
 permissions:
